@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heart-disease-prediction"
+version = "0.1.0"
+description = "Reproducible clinical heart disease classification system with end-to-end ML pipelines."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Ranjan Sharma" }
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Healthcare Industry",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+  "pandas>=2.0,<3.0",
+  "scikit-learn>=1.3,<2.0",
+  "joblib>=1.3,<2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4,<9.0",
+]
+notebook = [
+  "matplotlib>=3.7.0",
+  "seaborn>=0.12.0",
+  "xgboost>=2.0.0",
+]
+
+[project.scripts]
+heart-disease-train = "heart_disease.train:main"
+heart-disease-predict = "heart_disease.predict:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

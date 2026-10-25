@@ -1,0 +1,47 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install pytest
+
+      - name: Run pytest suite
+        run: |
+          pytest -v
+
+      - name: Smoke test training pipeline (Logistic Regression)
+        run: |
+          heart-disease-train --data processed.cleveland.data --model-type logistic_regression
+
+      - name: Smoke test training pipeline (Random Forest)
+        run: |
+          heart-disease-train --data processed.cleveland.data --model-type random_forest
+
+      - name: Smoke test prediction CLI
+        run: |
+          heart-disease-predict --features "63,1,3,145,233,1,0,150,0,2.3,0,0,1"
